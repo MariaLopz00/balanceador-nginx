@@ -3,17 +3,13 @@ services:
   web1:
     build:
       context: ./web1
+    restart: always
     ports:
       - "8081:80"
     networks:
       - mynetworkbalancer
     depends_on:
       - mysql  # web1 depende de MySQL
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "mysql"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   web2:
     build:
@@ -24,15 +20,12 @@ services:
       - mynetworkbalancer
     depends_on:
       - mysql  # web2 depende de MySQL
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "mysql"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    restart: always
 
   mysql:
     build:
       context: ./mysql
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: prueba
@@ -46,6 +39,7 @@ services:
   nginx:
     build:
       context: ./nginx
+    restart: always
     ports:    
       - "8088:80"
     networks:
